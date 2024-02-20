@@ -1,0 +1,57 @@
+
+.report {
+    margin: 20px;
+  }
+  
+  .heading {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border: 1px solid black;
+  }
+  
+  .attendance-table th,
+  .attendance-table td {
+    border: 1px solid black;
+    padding: 12px;
+    text-align: center;
+    white-space: nowrap;
+    position: relative;
+  }
+  
+  .attendance-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .attendance-table td {
+    font-size: 16px;
+    background-color: #f9f9f9;
+  }
+  
+  .days {
+    width: 200px;
+  }
+  
+  .missing-both::after {
+    content: '\2022'; 
+    color: red;
+    position: absolute;
+    top: 5px;
+    right: 5px; 
+  }
+  
+  .printButton {
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 20px;
+  }
+  
