@@ -54,4 +54,36 @@
     cursor: pointer;
     margin: 20px;
   }
+
+/* DropdownFilter.css */
+
+.filter {
+    display: flex;
+    gap: 10px;
+    margin: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .filterButton {
+    padding: 8px 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .filterButton:hover {
+    background-color: #45a049;
+  }
   
