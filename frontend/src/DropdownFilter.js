@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
-const DropdownFilter = ({ onFilterChange, data }) => {
-  const [selectedDepartment, setSelectedDepartment] = useState('');
+const DropdownFilter = ({ onFilterChange, data, initialDepartment }) => {
+  const [selectedDepartment, setSelectedDepartment] = useState(initialDepartment);
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
 
@@ -34,18 +34,21 @@ const DropdownFilter = ({ onFilterChange, data }) => {
   }, [data]);
 
   useEffect(() => {
-    if (departments.length > 0) {
+    if (initialDepartment) {
+      setSelectedDepartment(initialDepartment);
+    } else if (departments.length > 0) {
       setSelectedDepartment(departments[0].value);
     }
-
+  
     if (availableMonths.length > 0) {
       setSelectedMonth(availableMonths[0]);
     }
-
+  
     if (availableYears.length > 0) {
       setSelectedYear(availableYears[0]);
     }
-  }, [departments, availableMonths, availableYears]);
+  }, [initialDepartment, departments, availableMonths, availableYears]);
+  
 
   const handleFilterChange = () => {
     console.log("Filter changed:", selectedDepartment, selectedMonth, selectedYear);

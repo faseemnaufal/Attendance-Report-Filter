@@ -49,7 +49,7 @@ function App() {
 
   return (
     <div>
-      <DropdownFilter onFilterChange={handleFilterChange} data={data} />
+      <DropdownFilter onFilterChange={handleFilterChange} data={data} initialDepartment={filter.department_id}/>
       {loading ? <p>Loading...</p> : <AttendanceReport data={data} filter={filter}/>}
     </div>
   );
