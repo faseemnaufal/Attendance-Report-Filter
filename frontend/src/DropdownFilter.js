@@ -51,6 +51,7 @@ const DropdownFilter = ({ onFilterChange, data }) => {
   }, [departments, availableMonths, availableYears]);
 
   const handleFilterChange = () => {
+    console.log("Filter changed:", selectedDepartment, selectedMonth, selectedYear);
     onFilterChange(selectedDepartment, selectedMonth, selectedYear);
   };
 

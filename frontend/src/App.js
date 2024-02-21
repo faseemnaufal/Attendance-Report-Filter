@@ -6,26 +6,45 @@ import DropdownFilter from './DropdownFilter';
 function App() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [filter, setFilter] = useState({
+    year: 2024,
+    month: 1,
+    department_id: '',
+  });
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:3001/api/attendance?year=${filter.year}&month=${filter.month}&department=${filter.department_id}`);
+        const apiData = response.data;
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3001/api/attendance?year=2024&month=1&department=${selectedDepartment}`);
-      setData(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error.message);
-      setLoading(false);
-    }
-  };
+        const processedData = apiData.map(record => {
+          return {
+            employeeNumber: record.employeeNumber,
+            punches: record.punches, 
+          };
+        });
+
+        setData(processedData);
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [filter]);
 
   const handleFilterChange = (departmentId, selectedMonth, selectedYear) => {
-    setSelectedDepartment(departmentId);
-    fetchData();
+    console.log("Filter changed in App:", departmentId, selectedMonth, selectedYear);
+    setFilter({
+      ...filter,
+      department_id: departmentId,
+      month: selectedMonth,
+      year: selectedYear,
+    });
   };
 
   return (
