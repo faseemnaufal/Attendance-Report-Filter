@@ -34,17 +34,14 @@ const DropdownFilter = ({ onFilterChange, data }) => {
   }, [data]);
 
   useEffect(() => {
-    // If departments are available, select the first one by default
     if (departments.length > 0) {
       setSelectedDepartment(departments[0].value);
     }
 
-    // If months are available, select the first one by default
     if (availableMonths.length > 0) {
       setSelectedMonth(availableMonths[0]);
     }
 
-    // If years are available, select the first one by default
     if (availableYears.length > 0) {
       setSelectedYear(availableYears[0]);
     }
