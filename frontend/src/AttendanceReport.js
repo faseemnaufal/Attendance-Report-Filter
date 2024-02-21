@@ -53,7 +53,7 @@ function processPunches(employeeNumber, punchesArray) {
     return result;
 }
 
-const AttendanceReport = ({ data }) => {
+const AttendanceReport = ({ data, filter }) => {
     const contentToPrint = useRef(null);
     const handlePrint = useReactToPrint({
         documentTitle: "Attendance Report",
@@ -107,7 +107,7 @@ const AttendanceReport = ({ data }) => {
                                     {Array.from({ length: daysInMonth }, (_, i) => {
                                         const dayString = String(i + 1).padStart(2, '0');
                                         const punches = employee.punches || [];
-                                        const punchesForDay = processPunches(employee.employeeNumber, punches).filter(punch => punch.date.startsWith(`2024-01-${dayString}`));
+                                        const punchesForDay = processPunches(employee.employeeNumber, punches, filter).filter(punch => punch.date.startsWith(`2024-01-${dayString}`));
                                         const inPunch = punchesForDay.find(punch => punch.punchType === 'In');
                                         const outPunch = punchesForDay.find(punch => punch.punchType === 'Out');
                                         const startTime = inPunch ? inPunch.punchTime.slice(8, 16) : '';
