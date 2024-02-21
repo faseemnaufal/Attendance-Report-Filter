@@ -9,7 +9,13 @@ app.use(cors());
 
 app.get('/api/attendance', async (req, res) => {
   try {
-    const apiUrl = 'https://grand-kandyan.herokuapp.com/apiv1.0/attendance/monthly-raw-report/?year=2024&month=1&department=1';
+    const { year, month, department } = req.query;
+
+    if (!year || !month || !department) {
+      return res.status(400).json({ error: 'Missing required parameters: year, month, department' });
+    }
+
+    const apiUrl = `https://grand-kandyan.herokuapp.com/apiv1.0/attendance/monthly-raw-report/?year=${year}&month=${month}&department=${department}`;
     const response = await axios.get(apiUrl);
     res.json(response.data);
   } catch (error) {
