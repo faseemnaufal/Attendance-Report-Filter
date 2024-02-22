@@ -35,17 +35,48 @@ function App() {
     };
 
     fetchData();
-  }, [filter]);
+  }, []);
+
+   
+   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:3001/api/attendance?year=${filter.year}&month=${filter.month}&department=${filter.department_id}`);
+        const apiData = response.data;
+
+        const processedData = apiData.map(record => {
+          return {
+            employeeNumber: record.employeeNumber,
+            punches: record.punches, 
+          };
+        });
+
+        setData(processedData);
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [filter]); 
 
   const handleFilterChange = (departmentId, selectedMonth, selectedYear) => {
     console.log("Filter changed in App:", departmentId, selectedMonth, selectedYear);
+  
+    const month = selectedMonth || filter.month;
+    const year = selectedYear || filter.year;
+  
     setFilter({
       ...filter,
       department_id: departmentId,
-      month: selectedMonth,
-      year: selectedYear,
+      month: month,
+      year: year,
     });
   };
+  
 
   return (
     <div>
