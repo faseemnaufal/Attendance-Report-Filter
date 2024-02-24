@@ -7,8 +7,8 @@ function App() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState({
-    year: 2024,
-    month: 1,
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
     department_id: '',
   });
 
@@ -66,13 +66,13 @@ function App() {
   const handleFilterChange = (departmentId, selectedMonth, selectedYear) => {
     console.log("Filter changed in App:", departmentId, selectedMonth, selectedYear);
   
-    const month = selectedMonth || filter.month;
+    //const month = selectedMonth || filter.month;
     const year = selectedYear || filter.year;
   
     setFilter({
       ...filter,
       department_id: departmentId,
-      month: month,
+      month: selectedMonth,
       year: year,
     });
   };
@@ -80,7 +80,7 @@ function App() {
 
   return (
     <div>
-      <DropdownFilter onFilterChange={handleFilterChange} data={data} initialDepartment={filter.department_id}/>
+      <DropdownFilter onFilterChange={handleFilterChange} data={data} initialDepartment={filter.department_id} initialMonth={filter.month} initialYear={filter.year}/>
       {loading ? <p>Loading...</p> : <AttendanceReport data={data} filter={filter}/>}
     </div>
   );

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
-const DropdownFilter = ({ onFilterChange, data, initialDepartment }) => {
+const DropdownFilter = ({ onFilterChange, data, initialDepartment, initialMonth, initialYear }) => {
   const [selectedDepartment, setSelectedDepartment] = useState(initialDepartment);
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState(initialMonth);
+  const [selectedYear, setSelectedYear] = useState(initialYear);
 
   const departments = useMemo(() => [
     { label: "Front office", value: 1 },
@@ -23,15 +23,36 @@ const DropdownFilter = ({ onFilterChange, data, initialDepartment }) => {
     { label: "Stewarding", value: 9 },
   ], []);
 
-  const availableMonths = useMemo(() => {
-    const uniqueMonths = Array.from(new Set(data.flatMap(employee => employee.punches.map(punch => punch.dateTime.slice(5, 7)))));
-    return uniqueMonths.sort();
-  }, [data]);
+  const months = useMemo(() => [
+    { label: "January", value: 1 },
+    { label: "February", value: 2 },
+    { label: "March", value: 3 },
+    { label: "April", value: 4 },
+    { label: "May", value: 5 },
+    { label: "June", value: 6 },
+    { label: "July", value: 7 },
+    { label: "August", value: 8 },
+    { label: "September", value: 9 },
+    { label: "October", value: 10 },
+    { label: "November", value: 11 },
+    { label: "December", value: 12 },
+  ], [data]);
 
-  const availableYears = useMemo(() => {
-    const uniqueYears = Array.from(new Set(data.flatMap(employee => employee.punches.map(punch => punch.dateTime.slice(0, 4)))));
-    return uniqueYears.sort();
-  }, [data]);
+  const years = useMemo(() => [
+    { label: "2022", value: 2022 },
+    { label: "2023", value: 2023 },
+    { label: "2024", value: 2024 },
+    { label: "2025", value: 2025 },
+    { label: "2026", value: 2026 },
+    { label: "2027", value: 2027 },
+    { label: "2028", value: 2028 },
+    { label: "2029", value: 2029 },
+  ], [data]);
+
+  // const availableYears = useMemo(() => {
+  //   const uniqueYears = Array.from(new Set(data.flatMap(employee => employee.punches.map(punch => punch.dateTime.slice(0, 4)))));
+  //   return uniqueYears.sort();
+  // }, [data]);
 
   useEffect(() => {
     if (initialDepartment) {
@@ -39,16 +60,23 @@ const DropdownFilter = ({ onFilterChange, data, initialDepartment }) => {
     } else if (departments.length > 0) {
       setSelectedDepartment(departments[0].value);
     }
-  
-    if (availableMonths.length > 0) {
-      setSelectedMonth(availableMonths[0]);
+
+    if (initialMonth) {
+      setSelectedMonth(initialMonth);
+    } else if (months.length > 0) {
+      setSelectedMonth(months[0].value);
     }
-  
-    if (availableYears.length > 0) {
-      setSelectedYear(availableYears[0]);
+
+    if (initialYear) {
+      setSelectedYear(initialYear);
+    } else if (years.length > 0) {
+      setSelectedYear(years[0].value);
     }
-  }, [initialDepartment, departments, availableMonths, availableYears]);
-  
+
+    // if (availableYears.length > 0) {
+    //   setSelectedYear(availableYears[0]);
+    // }
+  }, [initialDepartment, initialMonth, departments, months, initialYear, years]);
 
   const handleFilterChange = () => {
     console.log("Filter changed:", selectedDepartment, selectedMonth, selectedYear);
@@ -78,9 +106,9 @@ const DropdownFilter = ({ onFilterChange, data, initialDepartment }) => {
         value={selectedMonth}
         onChange={(e) => setSelectedMonth(e.target.value)}
       >
-        {availableMonths.map((month) => (
-          <option key={month} value={month}>
-            {month}
+        {months.map((month) => (
+          <option key={month.value} value={month.value}>
+            {month.label}
           </option>
         ))}
       </select>
@@ -92,9 +120,9 @@ const DropdownFilter = ({ onFilterChange, data, initialDepartment }) => {
         value={selectedYear}
         onChange={(e) => setSelectedYear(e.target.value)}
       >
-        {availableYears.map((year) => (
-          <option key={year} value={year}>
-            {year}
+        {years.map((year) => (
+          <option key={year.value} value={year.value}>
+            {year.label}
           </option>
         ))}
       </select>
