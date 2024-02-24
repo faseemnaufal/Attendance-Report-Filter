@@ -140,14 +140,15 @@ const AttendanceReport = ({ data, filter }) => {
                                                 {punchesForDay.length > 0 && (
                                                     <div>
                                                        <div>
-                                                            {inPunch ? `${startTime}(In)` : ''}
+                                                       {inPunch ? `${startTime}(In)` : ''}
                                                         </div>
+
                                                         <div>Start:{punchesForDay[0].shift.startTime}</div>
-                                                       
+
                                                         <div>
-                                                            {outPunch ? `${endTime}(Out)` : ''}
+                                                        {outPunch ? `${endTime}(Out)` : ''}
                                                         </div>
-                                                       
+
                                                         <div>End:{punchesForDay[0].shift.endTime}</div>
                                                     </div>
                                                 )}     
