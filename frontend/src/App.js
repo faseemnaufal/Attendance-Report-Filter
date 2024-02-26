@@ -81,7 +81,7 @@ function App() {
   return (
     <div>
       <DropdownFilter onFilterChange={handleFilterChange} data={data} initialDepartment={filter.department_id} initialMonth={filter.month} initialYear={filter.year}/>
-      {loading ? <p>Loading...</p> : <AttendanceReport data={data} filter={filter}/>}
+      {loading ? <p>Loading...</p> : <AttendanceReport data={data} filter={filter} initialDepartment={filter.department_id}/>}
     </div>
   );
 }

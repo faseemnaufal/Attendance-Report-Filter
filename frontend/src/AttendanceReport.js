@@ -2,26 +2,55 @@ import React, { useRef } from 'react';
 import './AttendanceReport.css';
 import { useReactToPrint } from 'react-to-print';
 
-function processPunches(employeeNumber, punchesArray, punchDate) {
-    const shifts = [
+const shiftsByDepartment = {
+    1: [
+        { id: 1, startTime: "07:00:00", endTime: "16:00:00" },
+        { id: 2, startTime: "13:00:00", endTime: "22:00:00" },
+        { id: 3, startTime: "22:00:00", endTime: "07:00:00" },
+    ],
+    8: [
         { id: 1, startTime: "05:00:00", endTime: "14:00:00" },
-        { id: 2, startTime: "06:00:00", endTime: "15:00:00" },
-        { id: 3, startTime: "07:00:00", endTime: "16:00:00" },
-        { id: 4, startTime: "08:00:00", endTime: "17:00:00" },
-        { id: 5, startTime: "10:00:00", endTime: "15:00:00" },
-        { id: 6, startTime: "13:00:00", endTime: "22:00:00" },
-        { id: 7, startTime: "14:00:00", endTime: "23:00:00" },
-        { id: 8, startTime: "15:00:00", endTime: "23:00:00" },
-        { id: 9, startTime: "16:00:00", endTime: "01:00:00" },
-        { id: 10, startTime: "17:00:00", endTime: "06:00:00" },
-        { id: 11, startTime: "18:00:00", endTime: "23:00:00" },
-        { id: 12, startTime: "20:00:00", endTime: "05:00:00" },
-        { id: 13, startTime: "21:00:00", endTime: "03:00:00" },
-        { id: 14, startTime: "22:00:00", endTime: "07:00:00" },
-        { id: 15, startTime: "23:00:00", endTime: "08:00:00" },
-        { id: 16, startTime: "00:00:00", endTime: "20:00:00" },
-        { id: 17, startTime: "00:00:00", endTime: "22:00:00" },
-    ];
+            { id: 2, startTime: "06:00:00", endTime: "15:00:00" },
+            { id: 3, startTime: "08:00:00", endTime: "17:00:00" },
+            { id: 4, startTime: "10:00:00", endTime: "15:00:00" },
+            { id: 5, startTime: "18:00:00", endTime: "23:00:00" },
+            { id: 6, startTime: "00:00:00", endTime: "20:00:00" },
+            { id: 7, startTime: "14:00:00", endTime: "23:00:00" },
+            { id: 8, startTime: "20:00:00", endTime: "05:00:00" },
+            { id: 9, startTime: "22:00:00", endTime: "07:00:00" },
+    ],
+    9: [
+        { id: 1, startTime: "07:00:00", endTime: "16:00:00" },
+        { id: 2, startTime: "16:00:00", endTime: "01:00:00" },
+        { id: 3, startTime: "23:00:00", endTime: "08:00:00" },
+    ],
+    12: [
+        { id: 1, startTime: "08:00:00", endTime: "17:00:00" },
+        { id: 2, startTime: "15:00:00", endTime: "23:00:00" },
+        { id: 3, startTime: "17:00:00", endTime: "06:00:00" },
+    ],
+    6: [
+        { id: 1, startTime: "06:00:00", endTime: "15:00:00" },
+        { id: 2, startTime: "14:00:00", endTime: "23:00:00" },
+        { id: 3, startTime: "00:00:00", endTime: "22:00:00" },
+    ],
+    10: [
+        { id: 1, startTime: "07:00:00", endTime: "16:00:00" },
+            { id: 2, startTime: "08:00:00", endTime: "17:00:00" },
+            { id: 3, startTime: "14:00:00", endTime: "23:00:00" },
+            { id: 4, startTime: "23:00:00", endTime: "08:00:00" },
+    ],
+    13: [
+        { id: 1, startTime: "07:00:00", endTime: "16:00:00" },
+            { id: 2, startTime: "08:00:00", endTime: "17:00:00" },
+            { id: 3, startTime: "16:00:00", endTime: "01:00:00" },
+            { id: 4, startTime: "21:00:00", endTime: "03:00:00" },
+    ],
+    
+};
+
+function processPunches(employeeNumber, punchesArray, punchDate, departmentId) {
+    const shifts = shiftsByDepartment[departmentId] || [];
 
     let result = [];
 
@@ -123,7 +152,7 @@ const AttendanceReport = ({ data, filter }) => {
                                     {Array.from({ length: daysInMonth }, (_, i) => {
                                         const dayString = String(i + 1).padStart(2, '0');
                                         const punches = employee.punches || [];
-                                        const punchesForDay = processPunches(employee.employeeNumber, punches, new Date(`${filter.year}-${filter.month}-${dayString}`));
+                                        const punchesForDay = processPunches(employee.employeeNumber, punches, new Date(`${filter.year}-${filter.month}-${dayString}`), filter.department_id);
                                         const inPunch = punchesForDay.find(punch => punch.punchType === 'In');
                                         const outPunch = punchesForDay.find(punch => punch.punchType === 'Out');
                                         const startTime = inPunch ? inPunch.punchTime.slice(8, 16) : '';
