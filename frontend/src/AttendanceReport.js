@@ -10,14 +10,14 @@ const shiftsByDepartment = {
     ],
     8: [
         { id: 1, startTime: "05:00:00", endTime: "14:00:00" },
-            { id: 2, startTime: "06:00:00", endTime: "15:00:00" },
-            { id: 3, startTime: "08:00:00", endTime: "17:00:00" },
-            { id: 4, startTime: "10:00:00", endTime: "15:00:00" },
-            { id: 5, startTime: "18:00:00", endTime: "23:00:00" },
-            { id: 6, startTime: "00:00:00", endTime: "20:00:00" },
-            { id: 7, startTime: "14:00:00", endTime: "23:00:00" },
-            { id: 8, startTime: "20:00:00", endTime: "05:00:00" },
-            { id: 9, startTime: "22:00:00", endTime: "07:00:00" },
+        { id: 2, startTime: "06:00:00", endTime: "15:00:00" },
+        { id: 3, startTime: "08:00:00", endTime: "17:00:00" },
+        { id: 4, startTime: "10:00:00", endTime: "15:00:00" },
+        { id: 5, startTime: "18:00:00", endTime: "23:00:00" },
+        { id: 6, startTime: "00:00:00", endTime: "20:00:00" },
+        { id: 7, startTime: "14:00:00", endTime: "23:00:00" },
+        { id: 8, startTime: "20:00:00", endTime: "05:00:00" },
+        { id: 9, startTime: "22:00:00", endTime: "07:00:00" },
     ],
     9: [
         { id: 1, startTime: "07:00:00", endTime: "16:00:00" },
@@ -27,7 +27,7 @@ const shiftsByDepartment = {
     12: [
         { id: 1, startTime: "08:00:00", endTime: "17:00:00" },
         { id: 2, startTime: "15:00:00", endTime: "23:00:00" },
-        { id: 3, startTime: "17:00:00", endTime: "06:00:00" },
+        { id: 3, startTime: "17:00:00", endTime: "08:00:00" },
     ],
     6: [
         { id: 1, startTime: "06:00:00", endTime: "15:00:00" },
@@ -36,21 +36,48 @@ const shiftsByDepartment = {
     ],
     10: [
         { id: 1, startTime: "07:00:00", endTime: "16:00:00" },
-            { id: 2, startTime: "08:00:00", endTime: "17:00:00" },
-            { id: 3, startTime: "14:00:00", endTime: "23:00:00" },
-            { id: 4, startTime: "23:00:00", endTime: "08:00:00" },
+        { id: 2, startTime: "08:00:00", endTime: "17:00:00" },
+        { id: 3, startTime: "14:00:00", endTime: "23:00:00" },
+        { id: 4, startTime: "23:00:00", endTime: "08:00:00" },
     ],
     13: [
         { id: 1, startTime: "07:00:00", endTime: "16:00:00" },
-            { id: 2, startTime: "08:00:00", endTime: "17:00:00" },
-            { id: 3, startTime: "16:00:00", endTime: "01:00:00" },
-            { id: 4, startTime: "21:00:00", endTime: "03:00:00" },
+        { id: 2, startTime: "08:00:00", endTime: "17:00:00" },
+        { id: 3, startTime: "16:00:00", endTime: "01:00:00" },
+        { id: 4, startTime: "21:00:00", endTime: "03:00:00" },
     ],
     
 };
 
+const elseShift = [
+        { id: 1, startTime: "05:00:00", endTime: "14:00:00" },
+        { id: 2, startTime: "06:00:00", endTime: "15:00:00" },
+        { id: 3, startTime: "07:00:00", endTime: "16:00:00" },
+        { id: 4, startTime: "08:00:00", endTime: "17:00:00" },
+        { id: 5, startTime: "10:00:00", endTime: "15:00:00" },
+        { id: 6, startTime: "13:00:00", endTime: "22:00:00" },
+        { id: 7, startTime: "14:00:00", endTime: "23:00:00" },
+        { id: 8, startTime: "15:00:00", endTime: "23:00:00" },
+        { id: 9, startTime: "16:00:00", endTime: "01:00:00" },
+        { id: 10, startTime: "17:00:00", endTime: "06:00:00" },
+        { id: 11, startTime: "18:00:00", endTime: "23:00:00" },
+        { id: 12, startTime: "20:00:00", endTime: "05:00:00" },
+        { id: 13, startTime: "21:00:00", endTime: "03:00:00" },
+        { id: 14, startTime: "22:00:00", endTime: "07:00:00" },
+        { id: 15, startTime: "23:00:00", endTime: "08:00:00" },
+        { id: 16, startTime: "00:00:00", endTime: "20:00:00" },
+        { id: 17, startTime: "00:00:00", endTime: "22:00:00" },
+];
+
+// Adding the "else" shift to all departments
+Object.keys(shiftsByDepartment).forEach(departmentId => {
+    shiftsByDepartment[departmentId].else = elseShift;
+});
+
 function processPunches(employeeNumber, punchesArray, punchDate, departmentId) {
     const shifts = shiftsByDepartment[departmentId] || [];
+
+    const elseShift = shifts.else || [];
 
     let result = [];
 
@@ -90,6 +117,44 @@ function processPunches(employeeNumber, punchesArray, punchDate, departmentId) {
                         endTime: assignedShift.endTime
                     }
                 });
+            }else {
+                let punchType;
+                let elseShiftFound = elseShift.find(elseShiftItem => {
+                    let elseShiftStartTime = new Date(punch.dateTime.split(" ")[0] + " " + elseShiftItem.startTime).getTime();
+                    let elseShiftEndTime = new Date(punch.dateTime.split(" ")[0] + " " + elseShiftItem.endTime).getTime();
+
+                    return Math.abs(punchTime - elseShiftStartTime) <= 3600000 || Math.abs(punchTime - elseShiftEndTime) <= 3600000;
+                });
+
+                if (elseShiftFound) {
+                    punchType = elseShiftFound.startTime <= punchTime && punchTime <= elseShiftFound.endTime ? 'Out' : 'In';
+
+                    result.push({
+                        employeeNumber: employeeNumber,
+                        date: punch.dateTime.split(" ")[0],
+                        punchTime: punch.dateTime,
+                        punchType: punchType,
+                        shift: {
+                            id: elseShiftFound.id,
+                            startTime: `${elseShiftFound.startTime}**`,
+                            endTime: `${elseShiftFound.endTime}**`
+                        }
+                    });
+                } else {
+                    punchType = punchTime >= elseShift[0].startTime && punchTime <= elseShift[0].endTime ? 'Out' : 'In';
+
+                    result.push({
+                        employeeNumber: employeeNumber,
+                        date: punch.dateTime.split(" ")[0],
+                        punchTime: punch.dateTime,
+                        punchType: punchType,
+                        shift: {
+                            id: elseShift[0].id,
+                            startTime: `${elseShift[0].startTime}**`,
+                            endTime: `${elseShift[0].endTime}**`
+                        }
+                    });
+                }
             }
         }
     });
